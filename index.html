@@ -234,6 +234,26 @@
                 wheelContainer.classList.add('flex');
             };
 
+            const spinWheel = () => {
+                spinBtn.disabled = true;
+                const segmentAngle = 360 / segments.length;
+                const winnerIndex = segments.findIndex(seg => seg === winner);
+                const targetSegmentCenter = (winnerIndex * segmentAngle) + (segmentAngle / 2);
+                const randomSpins = 8 + Math.floor(Math.random() * 4);
+                const targetRotation = (360 * randomSpins) - targetSegmentCenter;
+                const wheelAssembly = document.getElementById('wheel-wrapper');
+                wheelAssembly.style.transform = `rotate(${targetRotation}deg)`;
+            };
+
+            const showResult = () => {
+                revealMessageText.textContent = revealMessage;
+                winnerText.textContent = winner;
+                winnerText.style.color = optionColorMap[winner];
+                winnerText.classList.add('animate-pulse-reveal');
+                
+                resultDiv.className = 'fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-100 p-4 text-center';
+            };
+
             initializeOptions();
 
             addOptionBtn.addEventListener('click', () => {
