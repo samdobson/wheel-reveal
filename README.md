@@ -1,12 +1,14 @@
 # Wheel Reveal
 
+https://samdobson.github.io/wheel-reveal/
+
 A simple, fun, and interactive web application for creating a customisable spinning wheel to reveal a special message or announcement.
 
 ## Features
 
 *   **Customisable Options:** Add any number of options to the wheel.
 *   **Winner Selection:** Pre-select the winning option.
-*   **Custom Reveal Message:** Set a unique message to be displayed with the winning result.
+*   **Custom Reveal Message:** Set a message to be displayed with the winning result.
 *   **Spinning Animation:** A smooth and satisfying spinning animation to build anticipation.
 *   **Responsive Design:** Works on both desktop and mobile devices.
 
