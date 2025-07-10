@@ -134,6 +134,59 @@
                 updateFromInputs();
             };
 
+            const createWheel = () => {
+                const optionInputs = optionsList.querySelectorAll('.option-input');
+                const rawOptions = [...optionInputs].map(input => input.value.trim()).filter(val => val !== '');
+                options = [...new Set(rawOptions)];
+                winner = winnerSelect.value;
+                revealMessage = revealMessageInput.value;
+
+                optionColorMap = {};
+                options.forEach((option, index) => {
+                    optionColorMap[option] = colors[index % colors.length];
+                });
+
+                segments = [];
+                let i = 0;
+                while (segments.length < MIN_SEGMENTS) {
+                    segments.push(options[i % options.length]);
+                    i++;
+                }
+                if (segments.length % options.length !== 0) {
+                    const multiplier = Math.ceil(MIN_SEGMENTS / options.length);
+                    segments = Array.from({ length: multiplier * options.length }, (_, i) => options[i % options.length]);
+                }
+
+                wheelLabels.innerHTML = '';
+                const segmentAngle = 360 / segments.length;
+
+                const gradientParts = segments.map((segment, index) => {
+                    const color = optionColorMap[segment];
+                    const startAngle = index * segmentAngle;
+                    const endAngle = (index + 1) * segmentAngle;
+                    return `${color} ${startAngle}deg ${endAngle}deg`;
+                });
+                wheel.style.background = `conic-gradient(${gradientParts.join(', ')})`;
+
+                segments.forEach((segmentText, index) => {
+                    const labelContainer = document.createElement('div');
+                    labelContainer.className = 'wheel-label';
+                    const rotation = (index * segmentAngle) + (segmentAngle / 2);
+                    labelContainer.style.transform = `rotate(${rotation}deg)`;
+                    const textEl = document.createElement('span');
+                    textEl.className = 'wheel-label-text';
+                    textEl.textContent = segmentText;
+                    labelContainer.appendChild(textEl);
+                    wheelLabels.appendChild(labelContainer);
+                });
+
+                mainTitle.classList.add('hidden');
+                mainSubtitle.classList.add('hidden');
+                setupDiv.classList.add('hidden');
+                wheelContainer.classList.remove('hidden');
+                wheelContainer.classList.add('flex');
+            };
+
             initializeOptions();
 
             addOptionBtn.addEventListener('click', () => {
