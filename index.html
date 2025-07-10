@@ -274,6 +274,10 @@
                     updateFromInputs();
                 }
             });
+
+            createWheelBtn.addEventListener('click', createWheel);
+            spinBtn.addEventListener('click', spinWheel);
+            document.getElementById('wheel-wrapper').addEventListener('transitionend', showResult);
         });
     </script>
 
