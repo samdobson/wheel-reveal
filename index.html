@@ -53,5 +53,109 @@
         <p id="winnerText" class="text-6xl md:text-8xl font-extrabold my-4"></p>
     </div>
 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mainTitle = document.getElementById('main-title');
+            const mainSubtitle = document.getElementById('main-subtitle');
+            const setupDiv = document.getElementById('setup');
+            const optionsList = document.getElementById('options-list');
+            const addOptionBtn = document.getElementById('add-option-btn');
+            const winnerSelect = document.getElementById('winnerSelect');
+            const revealMessageInput = document.getElementById('revealMessageInput');
+            const createWheelBtn = document.getElementById('createWheelBtn');
+
+            const wheelContainer = document.getElementById('wheel-container');
+            const wheel = document.getElementById('wheel');
+            const wheelLabels = document.getElementById('wheel-labels');
+            const spinBtn = document.getElementById('spinBtn');
+
+            const resultDiv = document.getElementById('result');
+            const revealMessageText = document.getElementById('revealMessageText');
+            const winnerText = document.getElementById('winnerText');
+
+            let options = [];
+            let segments = [];
+            let winner = '';
+            let revealMessage = '';
+            const MIN_SEGMENTS = 10;
+            const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FED766', '#F0B37E', '#F79AD3', '#81D4FA', '#A5D6A7', '#B39DDB', '#FFCC80'];
+            let optionColorMap = {};
+
+            const createOptionRow = (value = '') => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center space-x-2';
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'option-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500';
+                input.value = value;
+                input.placeholder = 'Enter option name';
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-option-btn flex-shrink-0 bg-red-500 text-white rounded-md p-2 hover:bg-red-600 disabled:bg-red-300 disabled:cursor-not-allowed';
+                deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd" /></svg>`;
+
+                row.appendChild(input);
+                row.appendChild(deleteBtn);
+                return row;
+            };
+
+            const updateFromInputs = () => {
+                const optionInputs = optionsList.querySelectorAll('.option-input');
+                const currentOptions = [...optionInputs].map(input => input.value.trim()).filter(val => val !== '');
+                const uniqueOptions = [...new Set(currentOptions)];
+
+                winnerSelect.innerHTML = '';
+                if (uniqueOptions.length > 0) {
+                    uniqueOptions.forEach(opt => {
+                        const optionEl = document.createElement('option');
+                        optionEl.value = opt;
+                        optionEl.textContent = opt;
+                        winnerSelect.appendChild(optionEl);
+                    });
+                    winnerSelect.disabled = false;
+                } else {
+                    winnerSelect.innerHTML = '<option>Enter options first</option>';
+                    winnerSelect.disabled = true;
+                }
+
+                createWheelBtn.disabled = uniqueOptions.length < 2;
+
+                const deleteBtns = optionsList.querySelectorAll('.delete-option-btn');
+                const canDelete = optionInputs.length > 2;
+                deleteBtns.forEach(btn => btn.disabled = !canDelete);
+            };
+
+            const initializeOptions = () => {
+                optionsList.innerHTML = '';
+                optionsList.appendChild(createOptionRow('Boy'));
+                optionsList.appendChild(createOptionRow('Girl'));
+                updateFromInputs();
+            };
+
+            initializeOptions();
+
+            addOptionBtn.addEventListener('click', () => {
+                optionsList.appendChild(createOptionRow());
+                updateFromInputs();
+            });
+
+            optionsList.addEventListener('input', (e) => {
+                if (e.target.classList.contains('option-input')) {
+                    updateFromInputs();
+                }
+            });
+
+            optionsList.addEventListener('click', (e) => {
+                const deleteBtn = e.target.closest('.delete-option-btn');
+                if (deleteBtn && !deleteBtn.disabled) {
+                    deleteBtn.parentElement.remove();
+                    updateFromInputs();
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
